@@ -8,6 +8,23 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const createDefaultAdmin = async () => {
+      try {
+        const adminUser = await client.get("user:MarkW");
+        if (!adminUser) {
+          const defaultAdmin = {
+            username: "MarkW",
+            password: "1234",
+            role: "Administrator"
+          };
+          await client.set("user:MarkW", defaultAdmin);
+        }
+      } catch (error) {
+        console.error("Error creating default admin:", error);
+      }
+    };
+
+    createDefaultAdmin();
     const fetchUser = async () => {
       try {
         const userData = await client.get("currentUser");
