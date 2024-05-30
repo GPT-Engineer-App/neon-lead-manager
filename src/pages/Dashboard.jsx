@@ -107,7 +107,17 @@ const Dashboard = () => {
             <StatHelpText>Updated 1 hour ago</StatHelpText>
           </Stat>
         </StatGroup>
-        <Text>Team Chat</Text>
+
+        <Text mt={4}>Team Chat</Text>
+        <Box bg="gray.200" p={2} rounded="md" height="300px" overflowY="scroll" mb={4}>
+          <Text color="white">[Chat messages will appear here]</Text>
+        </Box>
+        <FormControl id="chat" mb={4}>
+          <Input placeholder="Type your message..." bg="white" />
+          <Button mt={2} colorScheme="orange" bg="#FF9933" color="white" _hover={{ bg: "#FF7F00" }}>
+            Send
+          </Button>
+        </FormControl>
       </Box>
     </Flex>
   );
