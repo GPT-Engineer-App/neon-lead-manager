@@ -6,16 +6,22 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await login(username, password);
-    if (success) {
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    try {
+      const success = await login(username, password);
+      if (success) {
+        navigate("/dashboard");
+      } else {
+        setError("Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred during login. Please try again.");
     }
   };
 
@@ -27,6 +33,7 @@ const Login = () => {
         </Heading>
         <form onSubmit={handleSubmit}>
           <Stack spacing={4}>
+            {error && <Text color="red.500">{error}</Text>}
             <Box>
               <Text color="white" mb={2}>Username</Text>
               <Input
