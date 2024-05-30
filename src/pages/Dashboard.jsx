@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Flex, Text, Table, Thead, Tbody, Tr, Th, Td, Button, Collapse, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { Box, Flex, Text, Table, Thead, Tbody, Tr, Th, Td, Button, Collapse, FormControl, FormLabel, Input, Stat, StatLabel, StatNumber, StatHelpText, StatGroup } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([
@@ -88,6 +88,25 @@ const Dashboard = () => {
       </Box>
       <Box width="20%" bg="gray.300" p={4}>
         <Text>Performance Metrics</Text>
+        <StatGroup>
+          <Stat>
+            <StatLabel>Leads Generated This Week</StatLabel>
+            <StatNumber color="#00FF00">45</StatNumber>
+            <StatHelpText>Updated 1 hour ago</StatHelpText>
+          </Stat>
+
+          <Stat>
+            <StatLabel>Sales Closed This Month</StatLabel>
+            <StatNumber color="#00FF00">12</StatNumber>
+            <StatHelpText>Updated 1 hour ago</StatHelpText>
+          </Stat>
+
+          <Stat>
+            <StatLabel>Top Performing Salesperson</StatLabel>
+            <StatNumber color="#00FF00">Alice</StatNumber>
+            <StatHelpText>Updated 1 hour ago</StatHelpText>
+          </Stat>
+        </StatGroup>
         <Text>Team Chat</Text>
       </Box>
     </Flex>
