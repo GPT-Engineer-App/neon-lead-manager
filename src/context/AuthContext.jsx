@@ -28,9 +28,12 @@ export const AuthProvider = ({ children }) => {
       const userData = await client.get(`user:${username}`);
       if (userData && userData.password === password) {
         const role = await getRole(username);
-        setUser({ ...userData, role });
-        await client.set("currentUser", { ...userData, role });
+        const userWithRole = { ...userData, role };
+        setUser(userWithRole);
+        await client.set("currentUser", userWithRole);
         return true;
+      } else {
+        console.error("Invalid credentials");
       }
     } catch (error) {
       console.error("Error during login:", error);
