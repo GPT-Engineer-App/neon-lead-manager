@@ -1,5 +1,5 @@
-import { Box, Flex, Text, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useState } from "react";
+import { Box, Flex, Text, Table, Thead, Tbody, Tr, Th, Td, Button, Collapse, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([
@@ -8,6 +8,24 @@ const Dashboard = () => {
     { name: "Mike Johnson", contact: "mike@example.com", source: "Website", status: "Converted", salesperson: "Charlie" },
     // Add more leads as needed
   ]);
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [newLead, setNewLead] = useState({ name: "", contact: "", rvInterests: "" });
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // Add the new lead to the leads array
+    setLeads([...leads, { ...newLead, status: "New", salesperson: "Unassigned" }]);
+    // Reset the form fields
+    setNewLead({ name: "", contact: "", rvInterests: "" });
+    // Close the form
+    setIsFormOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewLead({ ...newLead, [name]: value });
+  };
 
   const renderLeads = () => {
     return leads.map((lead, index) => (
@@ -43,7 +61,30 @@ const Dashboard = () => {
             {renderLeads()}
           </Tbody>
         </Table>
-        <Text>Quick Add Lead Form</Text>
+        <Button onClick={() => setIsFormOpen(!isFormOpen)} colorScheme="orange" bg="#FF9933" color="white" _hover={{ bg: "#FF7F00" }} mb={4}>
+          {isFormOpen ? "Close Form" : "Quick Add Lead Form"}
+        </Button>
+        <Collapse in={isFormOpen} animateOpacity>
+          <Box bg="gray.300" p={4} rounded="md" mb={4}>
+            <form onSubmit={handleFormSubmit}>
+              <FormControl id="name" mb={4}>
+                <FormLabel color="white">Name</FormLabel>
+                <Input name="name" value={newLead.name} onChange={handleInputChange} bg="white" />
+              </FormControl>
+              <FormControl id="contact" mb={4}>
+                <FormLabel color="white">Contact Information</FormLabel>
+                <Input name="contact" value={newLead.contact} onChange={handleInputChange} bg="white" />
+              </FormControl>
+              <FormControl id="rvInterests" mb={4}>
+                <FormLabel color="white">RV Interests</FormLabel>
+                <Input name="rvInterests" value={newLead.rvInterests} onChange={handleInputChange} bg="white" />
+              </FormControl>
+              <Button type="submit" colorScheme="orange" bg="#FF9933" color="white" _hover={{ bg: "#FF7F00" }}>
+                Submit Lead
+              </Button>
+            </form>
+          </Box>
+        </Collapse>
       </Box>
       <Box width="20%" bg="gray.300" p={4}>
         <Text>Performance Metrics</Text>
