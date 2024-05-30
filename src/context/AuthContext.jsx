@@ -9,24 +9,43 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userData = await client.get("currentUser");
-      if (userData) {
-        setUser(userData);
+      try {
+        const userData = await client.get("currentUser");
+        if (userData) {
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUser();
   }, []);
 
   const login = async (username, password) => {
-    // Implement login logic here
-    const userData = await client.get(`user:${username}`);
-    if (userData && userData.password === password) {
-      setUser(userData);
-      await client.set("currentUser", userData);
-      return true;
+    try {
+      const userData = await client.get(`user:${username}`);
+      if (userData && userData.password === password) {
+        const role = await getRole(username);
+        setUser({ ...userData, role });
+        await client.set("currentUser", { ...userData, role });
+        return true;
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
     }
     return false;
+  };
+
+  const getRole = async (username) => {
+    try {
+      const roleData = await client.get(`role:${username}`);
+      return roleData ? roleData.role : "Salesperson";
+    } catch (error) {
+      console.error("Error fetching role:", error);
+      return "Salesperson";
+    }
   };
 
   const logout = async () => {
