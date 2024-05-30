@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
             role: "Administrator"
           };
           await client.set("user:MarkW", defaultAdmin);
+        console.log("Default admin created:", defaultAdmin);
+        } else {
+          console.log("Admin user already exists:", adminUser);
         }
       } catch (error) {
         console.error("Error creating default admin:", error);
@@ -30,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         const userData = await client.get("currentUser");
         if (userData) {
           setUser(userData);
+        console.log("Fetched current user:", userData);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -48,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         const userWithRole = { ...userData, role };
         setUser(userWithRole);
         await client.set("currentUser", userWithRole);
+        console.log("Login successful:", userWithRole);
         return true;
       } else {
         console.error("Invalid credentials");
@@ -61,6 +66,7 @@ export const AuthProvider = ({ children }) => {
   const getRole = async (username) => {
     try {
       const roleData = await client.get(`role:${username}`);
+      console.log("Fetched role for user:", username, roleData);
       return roleData ? roleData.role : "Salesperson";
     } catch (error) {
       console.error("Error fetching role:", error);
